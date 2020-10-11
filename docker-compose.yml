@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  api:
+    container_name: api
+    build: .
+    ports:
+      - 8080:8080
+    links:
+      - mysql
+    tty:
+      true
+    volumes:
+      - ./src/api:/go/src/api
+
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    hostname: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: app
+      DB_USERNAME: root
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - "./mysql_data/mysql:/var/lib/mysql"
+      - "./docker/mysql/my.conf:/etc/mysql/my.conf"
+      - "./docker/mysql/init/:/docker-entrypoint-initdb.d"
